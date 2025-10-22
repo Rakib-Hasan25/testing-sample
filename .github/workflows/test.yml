@@ -1,9 +1,10 @@
 name: CI/CD Pipeline
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   build:
@@ -11,17 +12,19 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4   # latest version
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4  # latest version
         with:
           node-version: 20
 
       - name: Install dependencies
         working-directory: 5-express-vitest-prisma
-        run: npm install && npx prisma generate
+        run: |
+          npm ci
+          npx prisma generate
 
       - name: Run tests
         working-directory: 5-express-vitest-prisma
-        run: npm run test
+        run: npm test
